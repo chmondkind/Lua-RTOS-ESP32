@@ -49,15 +49,18 @@
 #include <sys/driver.h>
 
 typedef enum {
-	NeopixelWS2812B,
+	NeopixelSK2812,						//Changed from NeopixelWS2812B,
 } neopixel_controller_t;
 
-typedef struct {
-	uint8_t g;
-	uint8_t r;
-	uint8_t b;
-} neopixel_pixel_t;
 
+typedef struct {						//modified from WS2812B grb to SK2812 rgbw
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+	uint8_t w;
+} neopixel_pixel_t;
+	
+	
 typedef struct {
 	uint32_t nzr_unit;
 	neopixel_pixel_t *pixels;
@@ -74,7 +77,7 @@ typedef struct {
 extern const int neopixel_errors;
 extern const int neopixel_error_map;
 
-driver_error_t *neopixel_rgb(uint32_t unit, uint32_t pixel, uint8_t r, uint8_t g, uint8_t b);
+driver_error_t *neopixel_rgb(uint32_t unit, uint32_t pixel, uint8_t r, uint8_t g, uint8_t b, uint8_t w);	//Added w
 driver_error_t *neopixel_setup(neopixel_controller_t controller, uint8_t gpio, uint32_t pixels, uint32_t *unit);
 driver_error_t *neopixel_update(uint32_t unit);
 
