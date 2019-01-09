@@ -56,8 +56,12 @@
 
 #define NEO_CYCLES(n) ((double)n / (double)((double)1000000000L / (double)CPU_HZ))
 
+
+//static nzr_timing_t chipset[1] = {
+//	{NEO_CYCLES(350), NEO_CYCLES(900), NEO_CYCLES(900), NEO_CYCLES(350), NEO_CYCLES(50000)}, // WS2812B
+};
 static nzr_timing_t chipset[1] = {
-	{NEO_CYCLES(350), NEO_CYCLES(900), NEO_CYCLES(900), NEO_CYCLES(350), NEO_CYCLES(50000)}, // WS2812B
+	{NEO_CYCLES(300), NEO_CYCLES(900), NEO_CYCLES(600), NEO_CYCLES(600), NEO_CYCLES(80000)}, // SK2812 T0H, T0L, T1H, T1L, RES
 };
 
 // Register driver and messages
@@ -82,7 +86,7 @@ void neopixel_init() {
 	lstinit(&neopixel_list, 0, LIST_DEFAULT);
 }
 
-driver_error_t *neopixel_rgb(uint32_t unit, uint32_t pixel, uint8_t r, uint8_t g, uint8_t b) {
+driver_error_t *neopixel_rgb(uint32_t unit, uint32_t pixel, uint8_t r, uint8_t g, uint8_t b, uint8_t w) {	///Added w
 	neopixel_instance_t *instance;
 
 	// Get instance
@@ -97,6 +101,7 @@ driver_error_t *neopixel_rgb(uint32_t unit, uint32_t pixel, uint8_t r, uint8_t g
     instance->pixels[pixel].r = r;
     instance->pixels[pixel].g = g;
     instance->pixels[pixel].b = b;
+    instance->pixels[pixel].w = w;									//Added w
 
     return NULL;
 }
@@ -105,7 +110,7 @@ driver_error_t *neopixel_setup(neopixel_controller_t controller, uint8_t gpio, u
 	driver_error_t *error;
 	uint32_t nzr_unit;
 
-	if (controller > 1) {
+	if (controller > 1) {										
 		return driver_error(NEOPIXEL_DRIVER, NEOPIXEL_ERR_INVALID_CONTROLLER, NULL);
 	}
 
@@ -150,7 +155,7 @@ driver_error_t *neopixel_update(uint32_t unit) {
     }
 
     // Send buffer
-    if ((error = nzr_send(instance->nzr_unit, (uint8_t *)instance->pixels, 24 * instance->npixels))) {
+    if ((error = nzr_send(instance->nzr_unit, (uint8_t *)instance->pixels, 32 * instance->npixels))) { //32 instead of 24
 		return error;
 	}
 
