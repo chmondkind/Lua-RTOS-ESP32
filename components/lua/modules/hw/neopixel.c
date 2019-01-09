@@ -112,6 +112,7 @@ static int lneopixel_set_pixel( lua_State* L ) {
     int r = luaL_checkinteger( L, 3 );
     int g = luaL_checkinteger( L, 4 );
     int b = luaL_checkinteger( L, 5 );
+    int w = luaL_checkinteger( L, 6 );							//Added W
 
     if (pixel < 0) {
     	return luaL_exception(L, NEOPIXEL_ERR_INVALID_PIXEL);
@@ -128,8 +129,12 @@ static int lneopixel_set_pixel( lua_State* L ) {
     if ((b < 0) || (b > 255)) {
     	return luaL_exception_extended(L, NEOPIXEL_ERR_INVALID_RGB_COMPONENT, "b");
     }
+	
+    if ((w < 0) || (w > 255)) {
+    	return luaL_exception_extended(L, NEOPIXEL_ERR_INVALID_RGB_COMPONENT, "W"); 	//Added check for W
+    }
 
-    if ((error = neopixel_rgb(neopixel->unit, pixel, r, g, b))) {
+    if ((error = neopixel_rgb(neopixel->unit, pixel, r, g, b, w))) { 			//Added W
     	return luaL_driver_error(L, error);
     }
 
@@ -155,6 +160,7 @@ static const LUA_REG_TYPE lneopixel_map[] = {
     { LSTRKEY( "attach"  ),	     LFUNCVAL ( lneopixel_attach   ) },
 	DRIVER_REGISTER_LUA_ERRORS(neopixel)
 	{ LSTRKEY( "WS2812B" ),      LINTVAL  ( NeopixelWS2812B    ) },
+	{ LSTRKEY( "SK2812" ),      LINTVAL  ( NeopixelSK2812    ) },			//Added SK2812
 	{ LNILKEY, LNILVAL }
 };
 
