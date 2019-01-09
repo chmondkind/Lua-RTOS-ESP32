@@ -59,7 +59,7 @@
 
 //static nzr_timing_t chipset[1] = {
 //	{NEO_CYCLES(350), NEO_CYCLES(900), NEO_CYCLES(900), NEO_CYCLES(350), NEO_CYCLES(50000)}, // WS2812B
-};
+//};
 static nzr_timing_t chipset[1] = {
 	{NEO_CYCLES(300), NEO_CYCLES(900), NEO_CYCLES(600), NEO_CYCLES(600), NEO_CYCLES(80000)}, // SK2812 T0H, T0L, T1H, T1L, RES
 };
